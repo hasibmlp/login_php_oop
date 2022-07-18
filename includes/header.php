@@ -1,4 +1,7 @@
+<?php session_start() ?>
+
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -25,9 +28,23 @@
     <nav>
       <ul>
       <li><a href="index.php">Home</a></li>
-        <li><a href="login.php">login</a></li>
-        <li><a href="signup.php">Sighup</a></li>
+        <?php 
+          if($_SESSION['userId']) 
+          {
+        ?>
+            <li><a href="logout.php">logout</a></li>
+        <?php
+          }else {
+        ?>
+          <li><a href="login.php">login</a></li>
+          <li><a href="signup.php">Sighup</a></li>
+        <?php
+          }
+        ?>
+        
         <li><a href="about.php">about</a></li>
+
+      
       </ul>
     </nav>
     <div>
