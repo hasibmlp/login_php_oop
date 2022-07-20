@@ -29,7 +29,7 @@
       <ul>
       <li><a href="index.php">Home</a></li>
         <?php 
-          if($_SESSION['userId']) 
+          if(isset($_SESSION['userId'])) 
           {
         ?>
             <li><a href="logout.php">logout</a></li>

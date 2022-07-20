@@ -2,7 +2,7 @@
 
 if(isset($_POST['submit'])) {
     $username = $_POST['uid'];
-    $pass = $_POST['pass'];
+    $pass = $_POST['pwd'];
 
 
     include '../class/dbh.class.php';

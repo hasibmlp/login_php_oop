@@ -1,24 +1,25 @@
 <?php
 
 class Login extends Dbh {
-    public function getUser($username, $pass) {
+    protected function getUser($username, $pass) {
         $stmt = $this->connect()->prepare("SELECT userPass FROM users2 WHERE userUid = ? OR userEmail = ?;");
 
-        if(!$stmt->execute(array($username, $username))){
+        if(!$stmt->execute(array($username, $pass))){
             $stmt = null;
             header('Location:../index.php?error=stfailed');
             exit();
 
         }
 
-        if($stmt->rowCount == 0 ) {
+        if($stmt->rowCount() == 0 ) {
             $stmt = null;
-            header('Location:../index.php?error=userNotFound');
+            header('Location:../index.php?error=userNotFound1');
+
             exit();
         }
 
-        $passHashed = $stmt->fetchAll(PSO::FETCH_ASSOC);
-        $checkPass = verify_password($pass, $passHashed[0]['userPass']);
+        $passHashed = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $checkPass = password_verify($pass, $passHashed[0]['userPass']);
 
         if($checkPass == false) {
             $stmt = null;
@@ -26,17 +27,17 @@ class Login extends Dbh {
             exit();
         }elseif ($checkPass == true) {
 
-            $stmt = $this->connect()->prepare("SELECT * FROM users2 WHERE userUid = ? userPass = ? userEmail = ?;");
+            $stmt = $this->connect()->prepare("SELECT * FROM users2 WHERE userUid = ? OR userEmail = ? AND userPass = ?;");
 
-            if (!$stmt->execute($username, $pass, $username)) {
+            if (!$stmt->execute(array($username, $username, $pass))) {
                 $stmt = null;
                 header('Location:../index.php?error=stmtfailed');
                 exit();
             }
 
-            if($stmt->rowCount == 0 ) {
+            if($stmt->rowCount() == 0 ) {
                 $stmt = null;
-                header('Location:../index.php?error=userNotFound');
+                header('Location:../index.php?error=userNotFound2');
                 exit();
 
                 $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
